@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{B2AD199E-C6F8-4DD0-AE07-B77BAA7CA63B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csGraph", "csGraph\csGraph.csproj", "{E9848988-BF57-47F5-B5F5-7E5606EAC39E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2AD199E-C6F8-4DD0-AE07-B77BAA7CA63B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2AD199E-C6F8-4DD0-AE07-B77BAA7CA63B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2AD199E-C6F8-4DD0-AE07-B77BAA7CA63B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2AD199E-C6F8-4DD0-AE07-B77BAA7CA63B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9848988-BF57-47F5-B5F5-7E5606EAC39E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9848988-BF57-47F5-B5F5-7E5606EAC39E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9848988-BF57-47F5-B5F5-7E5606EAC39E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9848988-BF57-47F5-B5F5-7E5606EAC39E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {15EAE781-67FC-4B13-8600-FEC93DE18023}
+	EndGlobalSection
+EndGlobal
