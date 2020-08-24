@@ -4,68 +4,104 @@ using System.Collections.Generic;
 
 namespace csGraph
 {
-    public class Graph<Node>
+    public class Graph<Vertex>
     {
-        public struct Edge
+        public class Edge
         {
+            public readonly Vertex s, t;
+            public Dictionary<string, object> traits;
 
-            public readonly Node s, t;
-
-            public Edge(Node s, Node t)
+            public Edge(Vertex s, Vertex t)
             {
                 this.s = s;
                 this.t = t;
+                traits = new Dictionary<string, object>();
             }
-            public bool isConnected(Node n)
+            public bool IsConnected(Vertex n)
             {
                 return n.Equals(s) || n.Equals(t);
             }
+            public T GetTraits<T>(string key)
+            {
+                return (T)traits[key];
+            }
+            public override bool Equals(object obj)
+            {
+                var e = obj as Edge;
+                if (e == null) return false;
+                return e.s.Equals(s) && e.t.Equals(t);
+            }
+            public override int GetHashCode()
+            {
+                var shash = ((uint)s.GetHashCode() << 16) | ((uint)s.GetHashCode() >> (31 - 15));
+                return (int)shash ^ t.GetHashCode();
+            }
+            public override string ToString()
+            {
+                return '(' + s.ToString() + ',' + t.ToString() + ')';
+            }
         }
-        public Graph(int nodeCapacity, int edgeCapacity)
+        public Graph(int vertexCapacity, int edgeCapacity)
         {
-            nodes_ = new HashSet<Node>(nodeCapacity);
+            vertexes_ = new HashSet<Vertex>(vertexCapacity);
             edges_ = new HashSet<Edge>(edgeCapacity);
         }
-        public Graph(IEnumerable<Node> nodes, IEnumerable<Edge> edges)
-            : this(nodes.Count(), edges.Count())
+        public Graph(IEnumerable<Vertex> vertexes, IEnumerable<Edge> edges)
+            : this(vertexes.Count(), edges.Count())
         {
-            AddNodes(nodes);
+            AddVertexes(vertexes);
             AddEdges(edges);
         }
         public Graph()
         {
-            nodes_ = new HashSet<Node>();
+            vertexes_ = new HashSet<Vertex>();
             edges_ = new HashSet<Edge>();
         }
 
         public bool isDirected { get; set; }
-        public IEnumerable<Node> nodes { get { return nodes_; } }
+        public IEnumerable<Vertex> vertexes { get { return vertexes_; } }
         public IEnumerable<Edge> edges { get { return edges_; } }
+        public IReadOnlyDictionary<Vertex, IReadOnlyDictionary<Vertex, bool>> adjacentMatrix {
+            get {
+                var mat = new Dictionary<Vertex, IReadOnlyDictionary<Vertex, bool>>(vertexes.Count());
+                foreach(var s in vertexes)
+                {
+                    mat.Add(s, new Dictionary<Vertex, bool>(vertexes.Count()));
+                    foreach(var t in vertexes)
+                    {
+                        (mat[s] as Dictionary<Vertex, bool>).Add(t, Exist(new Edge(s, t)));
+                        if(!isDirected && !mat[s].ContainsKey(t))
+                            (mat[s] as Dictionary<Vertex, bool>).Add(t, Exist(new Edge(s, t)));
+                    }
+                }
+                return mat;
+            }
+        }
 
-        public bool AddNode(Node n) {
-            if (nodes_.Contains(n)) return false;
-            nodes_.Add(n);
+        public bool AddVertex(Vertex v) {
+            if (vertexes_.Contains(v)) return false;
+            vertexes_.Add(v);
             return true;
         }
-        public int AddNodes(IEnumerable<Node> list) {
+        public int AddVertexes(IEnumerable<Vertex> list) {
             int ret = 0;
-            foreach (var n in list) ret +=  nodes_.Add(n) ? 1 : 0;
+            foreach (var n in list) ret +=  vertexes_.Add(n) ? 1 : 0;
             return ret;
         }
-        public void DeleteNode(Node n) {
-            nodes_.Remove(n);
-            edges_.RemoveWhere(e => n.Equals(e.s) || e.t.Equals(n));
+        public void DeleteVertexes(Vertex v) {
+            vertexes_.Remove(v);
+            edges_.RemoveWhere(e => v.Equals(e.s) || e.t.Equals(v));
         }
         public bool AddEdge(Edge edge) {
             if (edge.s.Equals(edge.t) ||
                 (isDirected && edges_.Contains(edge)) ||
                 (!isDirected && (edges_.Contains(edge) || edges_.Contains(new Edge(edge.t, edge.s))))) return false;
             edges_.Add(edge);
-            AddNode(edge.s);
-            AddNode(edge.t);
+            AddVertex(edge.s);
+            AddVertex(edge.t);
             return true;
         }
-        public bool AddEdge(Node s, Node t) {
+        public bool AddEdge(Vertex s, Vertex t) {
             return AddEdge(new Edge(s, t));
         }
         public int AddEdges(IEnumerable<Edge> list) {
@@ -76,57 +112,57 @@ namespace csGraph
         public bool DeleteEdge(Edge edge) {
             return edges_.Remove(edge);
         }
-        public bool DeleteEdge(Node s, Node t) {
+        public bool DeleteEdge(Vertex s, Vertex t) {
             bool f = DeleteEdge(new Edge(s, t));
             if (!f && !isDirected) return DeleteEdge(new Edge(t, s));
             return f;
         }
 
 
-        public bool Exist(Node n) {
-            return nodes_.Contains(n);
+        public bool Exist(Vertex v) {
+            return vertexes_.Contains(v);
         }
         public bool Exist(Edge e) {
             return edges_.Contains(e);
         }
 
 
-        public IEnumerable<Node> GetConnectedNodes(Node n) {
+        public IEnumerable<Vertex> GetAdjacentVertexes(Vertex v) {
             return from e in edges
-                   where e.isConnected(n)
-                   select e.s.Equals(n) ? e.t : e.s;
+                   where e.IsConnected(v)
+                   select e.s.Equals(v) ? e.t : e.s;
         }
-        public IEnumerable<Edge> GetConnectedEdges(Node n) {
+        public IEnumerable<Edge> GetConnectedEdges(Vertex v) {
             return from e in edges
-                   where e.isConnected(n)
+                   where e.IsConnected(v)
                    select e;
         }
-        public int CountDegree(Node n) {
+        public int CountDegree(Vertex v) {
             int count = 0;
             foreach(var e in edges)
             {
-                count += e.isConnected(n) ? 1 : 0;
+                count += e.IsConnected(v) ? 1 : 0;
             }
             return count;
         }
-        public int CountOutDegree(Node n) {
+        public int CountOutDegree(Vertex v) {
             int count = 0;
             foreach(var e in edges)
             {
-                count += e.s.Equals(n) ? 1 : 0;
+                count += e.s.Equals(v) ? 1 : 0;
             }
             return count;
         }
-        public int CountInDegree(Node n) {
+        public int CountInDegree(Vertex v) {
             int count = 0;
             foreach(var e in edges)
             {
-                count += e.t.Equals(n) ? 1 : 0;
+                count += e.t.Equals(v) ? 1 : 0;
             }
             return count;
         }
 
-        HashSet<Node> nodes_;
+        HashSet<Vertex> vertexes_;
         HashSet<Edge> edges_;
     }
 }

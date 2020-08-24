@@ -16,9 +16,9 @@ public class GraphBasicTest
     public void TestNode()
     {
         Graph<int> G = new Graph<int>();
-        G.AddNode(0);
-        G.AddNodes(GetNodes());
-        Assert.AreEqual(10, G.nodes.Count());
+        G.AddVertex(0);
+        G.AddVertexes(GetNodes());
+        Assert.AreEqual(10, G.vertexes.Count());
     }
     [TestMethod]
     public void TestEdgeUndirected()
@@ -29,7 +29,7 @@ public class GraphBasicTest
         Assert.IsFalse(G.AddEdge(0, 0));
         Assert.IsFalse(G.AddEdge(2, 1));
         Assert.AreEqual(1, G.edges.Count());
-        Assert.AreEqual(2, G.nodes.Count());
+        Assert.AreEqual(2, G.vertexes.Count());
     }
     [TestMethod]
     public void TestEdgeDirected()
@@ -40,7 +40,7 @@ public class GraphBasicTest
         Assert.IsFalse(G.AddEdge(0, 0));
         Assert.IsTrue(G.AddEdge(2, 1));
         Assert.AreEqual(2, G.edges.Count());
-        Assert.AreEqual(2, G.nodes.Count());
+        Assert.AreEqual(2, G.vertexes.Count());
     }
     [TestMethod]
     public void TestDegree()
@@ -67,9 +67,9 @@ public class GraphBasicTest
         G.AddEdge(0, 0);
         G.AddEdge(2, 1);
 
-        G.DeleteNode(1);
+        G.DeleteVertexes(1);
 
-        Assert.AreEqual<int>(1, G.nodes.Count());
+        Assert.AreEqual<int>(1, G.vertexes.Count());
         Assert.AreEqual<int>(0, G.edges.Count());
     }
 }
