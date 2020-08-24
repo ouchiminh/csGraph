@@ -45,6 +45,7 @@ namespace csGraph
         {
             vertexes_ = new HashSet<Vertex>(vertexCapacity);
             edges_ = new HashSet<Edge>(edgeCapacity);
+            isDirected = false;
         }
         public Graph(IEnumerable<Vertex> vertexes, IEnumerable<Edge> edges)
             : this(vertexes.Count(), edges.Count())
@@ -53,10 +54,8 @@ namespace csGraph
             AddEdges(edges);
         }
         public Graph()
-        {
-            vertexes_ = new HashSet<Vertex>();
-            edges_ = new HashSet<Edge>();
-        }
+            : this(0, 0)
+        { }
 
         public bool isDirected { get; set; }
         public IEnumerable<Vertex> vertexes { get { return vertexes_; } }
@@ -69,9 +68,8 @@ namespace csGraph
                     mat.Add(s, new Dictionary<Vertex, bool>(vertexes.Count()));
                     foreach(var t in vertexes)
                     {
-                        (mat[s] as Dictionary<Vertex, bool>).Add(t, Exist(new Edge(s, t)));
-                        if(!isDirected && !mat[s].ContainsKey(t))
-                            (mat[s] as Dictionary<Vertex, bool>).Add(t, Exist(new Edge(s, t)));
+                        (mat[s] as Dictionary<Vertex, bool>).Add(t,
+                            isDirected ? Exist(new Edge(s, t)) : Exist(new Edge(s, t)) || Exist(new Edge(t, s)));
                     }
                 }
                 return mat;
