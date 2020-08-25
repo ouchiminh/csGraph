@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace csGraph
 {
-    class Algorithm
+    public static class Algorithm
     {
+        public static IEnumerable<Vertex> GetPath<Vertex>(
+            Graph<Vertex> G,
+            Vertex s, Vertex t,
+            Func<Graph<Vertex>.Edge, dynamic> cost)
+        {
+            return null;
+        }
     }
 }
