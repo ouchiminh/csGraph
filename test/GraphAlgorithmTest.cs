@@ -19,5 +19,16 @@ public class GraphAlgorithmTest
         G.AddEdge(1, 2);
         G.AddEdge(2, 3);
 
+        var prev = Algorithm.GetPath(G, 0, x => 1);
+
+        Assert.AreEqual(prev[3], 2);
+        Assert.AreEqual(prev[2], 1);
+        Assert.AreEqual(prev[1], 0);
+
+        prev = Algorithm.GetPath(G, 1, x => 1);
+
+        Assert.AreEqual(prev[3], 2);
+        Assert.AreEqual(prev[2], 1);
+        Assert.AreEqual(prev[0], 1);
     }
 }

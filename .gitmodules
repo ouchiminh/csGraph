@@ -1,0 +1,3 @@
+[submodule "thirdparty/PriorityQueue"]
+	path = thirdparty/PriorityQueue
+	url = https://github.com/ouchiminh/PriorityQueue.git

@@ -60,10 +60,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Algorithm\Algorithm.vcxproj">
-      <Project>{0ba3a859-4558-406e-aa11-e542093b094c}</Project>
-      <Name>Algorithm</Name>
-    </ProjectReference>
     <ProjectReference Include="..\csGraph\csGraph.csproj">
       <Project>{e9848988-bf57-47f5-b5f5-7e5606eac39e}</Project>
       <Name>csGraph</Name>
