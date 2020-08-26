@@ -11,7 +11,7 @@ using csGraph;
 public class GraphAlgorithmTest
 {
     [TestMethod]
-    public void TestGetPath()
+    public void TestGetPathUndirected()
     {
         Graph<int> G = new Graph<int>();
         G.isDirected = false;
@@ -19,16 +19,37 @@ public class GraphAlgorithmTest
         G.AddEdge(1, 2);
         G.AddEdge(2, 3);
 
-        var prev = Algorithm.GetPath(G, 0, x => 1);
+        var prev = Algorithm.GetPath(G, 0, e => 1);
 
         Assert.AreEqual(prev[3], 2);
         Assert.AreEqual(prev[2], 1);
         Assert.AreEqual(prev[1], 0);
 
-        prev = Algorithm.GetPath(G, 1, x => 1);
+        prev = Algorithm.GetPath(G, 1, e => 1);
 
         Assert.AreEqual(prev[3], 2);
         Assert.AreEqual(prev[2], 1);
         Assert.AreEqual(prev[0], 1);
+    }
+    [TestMethod]
+    public void TestGetPathDirected()
+    {
+        Graph<int> G = new Graph<int>();
+        G.isDirected = true;
+        G.AddEdge(0, 1);
+        G.AddEdge(1, 2);
+        G.AddEdge(2, 3);
+
+        var prev = Algorithm.GetPath(G, 0, e => 1);
+
+        Assert.AreEqual(prev[3], 2);
+        Assert.AreEqual(prev[2], 1);
+        Assert.AreEqual(prev[1], 0);
+
+        prev = Algorithm.GetPath(G, 1, e => 1);
+
+        Assert.AreEqual(prev[3], 2);
+        Assert.AreEqual(prev[2], 1);
+        Assert.IsFalse(prev.TryGetValue(0, out int v));
     }
 }

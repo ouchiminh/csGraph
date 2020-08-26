@@ -9,6 +9,27 @@ namespace csGraph
 {
     public static class Algorithm
     {
+        /// <summary>
+        /// sから到達可能な全ての頂点への最短経路を返します。
+        /// </summary>
+        /// <typeparam name="Vertex">頂点の型</typeparam>
+        /// <param name="G">グラフ</param>
+        /// <param name="s">始点</param>
+        /// <param name="cost">辺のコストを返す述語</param>
+        /// <returns>sからその頂点への最短経路における、その頂点の直前に通る頂点</returns>
+        /// <remarks>
+        /// 戻り値は頂点をキーとした頂点の辞書です。sからキーの頂点へ向かう最短経路中でキーの頂点の直前に通る頂点が値です。
+        /// </remarks>
+        /// <example>
+        /// グラフG上でsからtへの最短経路を求めます。なお、辺のコストは全て1とします。
+        /// <code>
+        /// var res = Algorithm.GetPath(G, s, e=>1);
+        /// var s_tPath = new LinkedList&lt;Vertex&gt;(); // stパス
+        /// var prev = t;
+        /// s_tPath.AddLast(t);
+        /// while(res.TryGetValue(prev, out prev)) s_tPath.AddFirst(prev);
+        /// </code>
+        /// </example>
         public static Dictionary<Vertex, Vertex> GetPath<Vertex>(
             Graph<Vertex> G,
             Vertex s,
@@ -21,10 +42,10 @@ namespace csGraph
 
             foreach(var v in G.vertexes)
             {
-                var distance = v.Equals(s) ? 0 : double.MaxValue;
+                var distance = v.Equals(s) ? 0 : double.PositiveInfinity;
                 d.Add(v, distance);
-                q.Enqueue((distance, v));
             }
+            q.Enqueue((0, s));
             while (!q.Empty)
             {
                 var u = q.Dequeue();
@@ -43,5 +64,6 @@ namespace csGraph
 
             return prev;
         }
+
     }
 }
