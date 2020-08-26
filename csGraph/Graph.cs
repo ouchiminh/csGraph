@@ -28,6 +28,12 @@ namespace csGraph
                 this.t = t;
                 traits = new Dictionary<string, object>();
             }
+            public Edge(Vertex s, Vertex t, IDictionary<string, object> other)
+            {
+                this.s = s;
+                this.t = t;
+                traits = new Dictionary<string, object>(other);
+            }
             /// <summary>
             /// 指定された頂点が、この辺の始点か終点のいずれかであるかを返します。
             /// </summary>
@@ -86,6 +92,7 @@ namespace csGraph
             {
                 return '(' + s.ToString() + ',' + t.ToString() + ')';
             }
+
         }
         /// <summary>
         /// グラフの頂点と辺の数をあらかじめ指定し、メモリを確保しておきインスタンスを構築します。
@@ -116,9 +123,9 @@ namespace csGraph
             : this(0, 0)
         { }
 
-        public bool isDirected { get; set; }
-        public IEnumerable<Vertex> vertexes { get { return vertexes_; } }
-        public IEnumerable<Edge> edges { get { return edges_; } }
+        public bool isDirected;
+        public ICollection<Vertex> vertexes { get { return vertexes_; } }
+        public ICollection<Edge> edges { get { return edges_; } }
         /// <summary>
         /// 隣接行列
         /// </summary>
@@ -228,6 +235,9 @@ namespace csGraph
         public bool Exist(Vertex v) {
             return vertexes_.Contains(v);
         }
+        public bool Exist(Vertex v, out Vertex o) {
+            return vertexes_.TryGetValue(v, out o);
+        }
         /// <summary>
         /// 辺の存在を確認します。
         /// </summary>
@@ -235,6 +245,9 @@ namespace csGraph
         /// <returns>グラフ中に存在していればtrue、それ以外はfalse</returns>
         public bool Exist(Edge e) {
             return edges_.Contains(e);
+        }
+        public bool Exist(Edge e, out Edge o) {
+            return edges_.TryGetValue(e, out o);
         }
 
 

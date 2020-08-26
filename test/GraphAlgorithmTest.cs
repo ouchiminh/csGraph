@@ -52,4 +52,23 @@ public class GraphAlgorithmTest
         Assert.AreEqual(prev[2], 1);
         Assert.IsFalse(prev.TryGetValue(0, out int v));
     }
+    [TestMethod]
+    public void TestGetPathCostKey()
+    {
+        Graph<int> G = new Graph<int>();
+        var cost = new Dictionary<string, object>();
+        cost.Add("cost", 1);
+        G.isDirected = true;
+
+        G.AddEdge(new Graph<int>.Edge(0, 1, cost));
+        G.AddEdge(new Graph<int>.Edge(1, 2, cost));
+        G.AddEdge(new Graph<int>.Edge(2, 3, cost));
+
+
+        var prev = Algorithm.GetPath<int, int>(G, 0, "cost");
+
+        Assert.AreEqual(prev[3], 2);
+        Assert.AreEqual(prev[2], 1);
+        Assert.AreEqual(prev[1], 0);
+    }
 }

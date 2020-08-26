@@ -16,10 +16,7 @@ namespace csGraph
         /// <param name="G">グラフ</param>
         /// <param name="s">始点</param>
         /// <param name="cost">辺のコストを返す述語</param>
-        /// <returns>sからその頂点への最短経路における、その頂点の直前に通る頂点</returns>
-        /// <remarks>
-        /// 戻り値は頂点をキーとした頂点の辞書です。sからキーの頂点へ向かう最短経路中でキーの頂点の直前に通る頂点が値です。
-        /// </remarks>
+        /// <returns>頂点をキーとした頂点の辞書です。sからキーの頂点へ向かう最短経路中でキーの頂点の直前に通る頂点が値です。</returns>
         /// <example>
         /// グラフG上でsからtへの最短経路を求めます。なお、辺のコストは全て1とします。
         /// <code>
@@ -36,11 +33,11 @@ namespace csGraph
             Func<Graph<Vertex>.Edge, dynamic> cost)
         {
             PriorityQueue<(dynamic d, Vertex v)>
-                q = new PriorityQueue<(dynamic d, Vertex v)>((a,  b)=>a.d < b.d ? -1 : a.d > b.d ? 1 : 0);
+                q = new PriorityQueue<(dynamic d, Vertex v)>((a, b) => a.d < b.d ? -1 : a.d > b.d ? 1 : 0);
             Dictionary<Vertex, dynamic> d = new Dictionary<Vertex, dynamic>(G.vertexes.Count());
             Dictionary<Vertex, Vertex> prev = new Dictionary<Vertex, Vertex>(G.vertexes.Count());
 
-            foreach(var v in G.vertexes)
+            foreach (var v in G.vertexes)
             {
                 var distance = v.Equals(s) ? 0 : double.PositiveInfinity;
                 d.Add(v, distance);
@@ -49,10 +46,11 @@ namespace csGraph
             while (!q.Empty)
             {
                 var u = q.Dequeue();
-                foreach(var v in G.GetAdjacentVertexes(u.v))
+                foreach (var v in G.GetAdjacentVertexes(u.v))
                 {
-                    var alt = d[u.v] + cost(new Graph<Vertex>.Edge(u.v, v));
-                    if(d[v] > alt)
+                    G.Exist(new Graph<Vertex>.Edge(u.v, v), out Graph<Vertex>.Edge e);
+                    var alt = d[u.v] + cost(e);
+                    if (d[v] > alt)
                     {
                         d[v] = alt;
                         if (!prev.ContainsKey(v)) prev.Add(v, u.v);
@@ -65,5 +63,12 @@ namespace csGraph
             return prev;
         }
 
+        public static Dictionary<Vertex, Vertex> GetPath<Cost, Vertex>(
+            Graph<Vertex> G,
+            Vertex s,
+            string costKey)
+        {
+            return GetPath(G, s, e => e.GetTraits<Cost>(costKey));
+        }
     }
 }
