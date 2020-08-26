@@ -124,8 +124,8 @@ namespace csGraph
         { }
 
         public bool isDirected;
-        public ICollection<Vertex> vertexes { get { return vertexes_; } }
-        public ICollection<Edge> edges { get { return edges_; } }
+        public ISet<Vertex> vertexes { get { return vertexes_; } }
+        public ISet<Edge> edges { get { return edges_; } }
         /// <summary>
         /// 隣接行列
         /// </summary>
