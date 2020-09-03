@@ -16,7 +16,10 @@ namespace csGraph
         /// <param name="G">グラフ</param>
         /// <param name="s">始点</param>
         /// <param name="cost">辺のコストを返す述語</param>
-        /// <returns>頂点をキーとした頂点の辞書です。sからキーの頂点へ向かう最短経路中でキーの頂点の直前に通る頂点が値です。</returns>
+        /// <returns>
+        /// <para>Item1 : 頂点をキーとした頂点の辞書です。sからキーの頂点へ向かう最短経路中でキーの頂点の直前に通る頂点が値です。</para>
+        /// <para>Item2 : 頂点をキーとした距離の辞書です。</para>
+        /// </returns>
         /// <example>
         /// グラフG上でsからtへの最短経路を求めます。なお、辺のコストは全て1とします。
         /// <code>
@@ -27,7 +30,7 @@ namespace csGraph
         /// while(res.TryGetValue(prev, out prev)) s_tPath.AddFirst(prev);
         /// </code>
         /// </example>
-        public static Dictionary<Vertex, Vertex> GetPath<Vertex>(
+        public static Tuple<Dictionary<Vertex, Vertex>, Dictionary<Vertex, dynamic>> GetPath<Vertex>(
             Graph<Vertex> G,
             Vertex s,
             Func<Graph<Vertex>.Edge, dynamic> cost)
@@ -60,15 +63,22 @@ namespace csGraph
                 }
             }
 
-            return prev;
+            return new Tuple<Dictionary<Vertex, Vertex>, Dictionary<Vertex, dynamic>>(prev, d);
         }
 
-        public static Dictionary<Vertex, Vertex> GetPath<Cost, Vertex>(
+        public static Tuple<Dictionary<Vertex, Vertex>, Dictionary<Vertex, Cost>> GetPath<Cost, Vertex>(
             Graph<Vertex> G,
             Vertex s,
             string costKey)
         {
-            return GetPath(G, s, e => e.GetTraits<Cost>(costKey));
+            var res = GetPath(G, s, e => e.GetTraits<Cost>(costKey));
+            var d = new Dictionary<Vertex, Cost>(res.Item2.Count);
+            foreach(var v in res.Item2)
+            {
+                d.Add(v.Key, (Cost)v.Value);
+            }
+            return new Tuple<Dictionary<Vertex, Vertex>, Dictionary<Vertex, Cost>>(res.Item1, d);
+
         }
     }
 }

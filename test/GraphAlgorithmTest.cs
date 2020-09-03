@@ -19,13 +19,13 @@ public class GraphAlgorithmTest
         G.AddEdge(1, 2);
         G.AddEdge(2, 3);
 
-        var prev = Algorithm.GetPath(G, 0, e => 1);
+        var prev = Algorithm.GetPath(G, 0, e => 1).Item1;
 
         Assert.AreEqual(prev[3], 2);
         Assert.AreEqual(prev[2], 1);
         Assert.AreEqual(prev[1], 0);
 
-        prev = Algorithm.GetPath(G, 1, e => 1);
+        prev = Algorithm.GetPath(G, 1, e => 1).Item1;
 
         Assert.AreEqual(prev[3], 2);
         Assert.AreEqual(prev[2], 1);
@@ -40,13 +40,13 @@ public class GraphAlgorithmTest
         G.AddEdge(1, 2);
         G.AddEdge(2, 3);
 
-        var prev = Algorithm.GetPath(G, 0, e => 1);
+        var prev = Algorithm.GetPath(G, 0, e => 1).Item1;
 
         Assert.AreEqual(prev[3], 2);
         Assert.AreEqual(prev[2], 1);
         Assert.AreEqual(prev[1], 0);
 
-        prev = Algorithm.GetPath(G, 1, e => 1);
+        prev = Algorithm.GetPath(G, 1, e => 1).Item1;
 
         Assert.AreEqual(prev[3], 2);
         Assert.AreEqual(prev[2], 1);
@@ -65,7 +65,7 @@ public class GraphAlgorithmTest
         G.AddEdge(new Graph<int>.Edge(2, 3, cost));
 
 
-        var prev = Algorithm.GetPath<int, int>(G, 0, "cost");
+        var prev = Algorithm.GetPath<int, int>(G, 0, "cost").Item1;
 
         Assert.AreEqual(prev[3], 2);
         Assert.AreEqual(prev[2], 1);
