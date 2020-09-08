@@ -71,4 +71,48 @@ public class GraphAlgorithmTest
         Assert.AreEqual(prev[2], 1);
         Assert.AreEqual(prev[1], 0);
     }
+
+    [TestMethod]
+    public void TestDocCode()
+    {
+        var G = new Graph<char>();
+        var edgeTraits = new Dictionary<string, object>();
+        edgeTraits.Add("cost", 1);
+        G.AddEdge(new Graph<char>.Edge('s', 'A', edgeTraits));
+        G.AddEdge(new Graph<char>.Edge('B', 'E', edgeTraits));
+
+        edgeTraits["cost"] = 2;
+        G.AddEdge(new Graph<char>.Edge('A', 'B', edgeTraits));
+        G.AddEdge(new Graph<char>.Edge('s', 'C', edgeTraits));
+
+        edgeTraits["cost"] = 3;
+        G.AddEdge(new Graph<char>.Edge('D', 't', edgeTraits));
+
+        edgeTraits["cost"] = 4;
+        G.AddEdge(new Graph<char>.Edge('D', 'E', edgeTraits));
+
+        edgeTraits["cost"] = 5;
+        G.AddEdge(new Graph<char>.Edge('s', 'B', edgeTraits));
+
+        edgeTraits["cost"] = 6;
+        G.AddEdge(new Graph<char>.Edge('E', 't', edgeTraits));
+
+        edgeTraits["cost"] = 7;
+        G.AddEdge(new Graph<char>.Edge('E', 'C', edgeTraits));
+
+        edgeTraits["cost"] = 9;
+        G.AddEdge(new Graph<char>.Edge('B', 'D', edgeTraits));
+
+        //(var prev, var dist) = Algorithm.GetPath<int, char>(G, 's', "cost");
+        (var prev, var dist) = Algorithm.GetPath(G, 's', e => e.GetTraits<int>("cost"));
+
+        var stDist = (int)dist['t'];
+        var stPath = new LinkedList<char>();
+        var cur = 't';
+        stPath.AddFirst(cur);
+        while (prev.TryGetValue(cur, out cur)) stPath.AddFirst(cur);
+
+        Assert.AreEqual(stDist, 10);
+
+    }
 }

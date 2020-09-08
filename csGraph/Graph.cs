@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 namespace csGraph
 {
@@ -244,10 +245,21 @@ namespace csGraph
         /// <param name="e">辺</param>
         /// <returns>グラフ中に存在していればtrue、それ以外はfalse</returns>
         public bool Exist(Edge e) {
-            return edges_.Contains(e);
+            return Exist(e.s, e.t);
         }
         public bool Exist(Edge e, out Edge o) {
-            return edges_.TryGetValue(e, out o);
+            return Exist(e.s, e.t, out o);
+        }
+        /// <summary>
+        /// 辺の存在を確認します。
+        /// </summary>
+        protected bool Exist(Vertex s, Vertex t)
+        {
+            return edges_.Contains(new Edge(s, t)) || (!isDirected && edges_.Contains(new Edge(t, s)));
+        }
+        protected bool Exist(Vertex s, Vertex t, out Edge o)
+        {
+            return edges_.TryGetValue(new Edge(s, t), out o) || (!isDirected && edges_.TryGetValue(new Edge(t, s), out o));
         }
 
 

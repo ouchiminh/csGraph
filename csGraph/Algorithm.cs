@@ -27,7 +27,7 @@ namespace csGraph
         /// var s_tPath = new LinkedList&lt;Vertex&gt;(); // stパス
         /// var prev = t;
         /// s_tPath.AddLast(t);
-        /// while(res.TryGetValue(prev, out prev)) s_tPath.AddFirst(prev);
+        /// while(res.Item1.TryGetValue(prev, out prev)) s_tPath.AddFirst(prev);
         /// </code>
         /// </example>
         public static Tuple<Dictionary<Vertex, Vertex>, Dictionary<Vertex, dynamic>> GetPath<Vertex>(
